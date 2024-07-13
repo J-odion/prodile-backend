@@ -1,39 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { signup, login } = require('../controllers/authController');
+const { signup } = require('../controllers/auth/signup');
+const { login } = require('../controllers/auth/login');
+const { requestPasswordReset, resetPassword } = require('../controllers/auth/controlPassword');
+const { verifyOtp } = require('../controllers/auth/otpverification');
+const { resendOtp } = require('../controllers/auth/resendotp');
 
-// @route   POST api/auth/signup
-// @desc    Register user
-// @access  Public
+// Auth routes
 router.post('/signup', signup);
-
-// @route   POST api/auth/login
-// @desc    Authenticate user & get token
-// @access  Public
 router.post('/login', login);
-
-const { requestPasswordReset, resetPassword } = require('../controllers/authController');
-
-// @route   POST api/auth/request-password-reset
-// @desc    Request password reset
-// @access  Public
 router.post('/request-password-reset', requestPasswordReset);
-
-// @route   POST api/auth/reset-password/:token
-// @desc    Reset password
-// @access  Public
 router.post('/reset-password/:token', resetPassword);
+router.post('/verify-otp', verifyOtp);
+router.post('/resend-otp', resendOtp);
 
-const { sendVerificationEmail, verifyEmail } = require('../controllers/authController');
-
-// @route   POST api/auth/send-verification-email
-// @desc    Send verification email
-// @access  Public
-router.post('/send-verification-email', sendVerificationEmail);
-
-// @route   GET api/auth/verify-email/:token
-// @desc    Verify email
-// @access  Public
-router.get('/verify-email/:token', verifyEmail);
 
 module.exports = router;
