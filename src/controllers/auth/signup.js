@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
         });
 
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password);
+        user.password = await bcrypt.hash(password, salt);
 
         // Generate 6-digit OTP and save to user record
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
