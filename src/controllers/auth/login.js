@@ -5,8 +5,16 @@ const jwt = require("jsonwebtoken");
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
+  // Log the incoming request body
+  console.log("Login request body:", req.body);
+
+ 
   try {
     let user = await User.findOne({ email });
+
+    // Log the retrieved user
+    console.log("User retrieved:", user);
+
     if (!user) {
       return res
         .status(400)
@@ -19,11 +27,15 @@ exports.login = async (req, res) => {
         .json({ msg: "Invalid credentials - User not verified" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid credentials - Incorrect password' });
-        }
-    
+    // Compare the provided password with the hashed password in the database
+    const isMatch = bcrypt.compare(password, user.password);
+
+
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ msg: "Invalid credentials - Incorrect password" });
+    }
 
     const payload = {
       user: {
