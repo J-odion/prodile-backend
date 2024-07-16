@@ -8,6 +8,13 @@ dotenv.config();
 connectDB();
 
 const app = express();
+ const ALLOWED_ORIGINS= [
+  'https://prodile-project.vercel.app', 
+  'https://app-prodile.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'http://localhost:3001'
+]
 
 // Middleware
 app.use(express.json());
@@ -15,7 +22,7 @@ app.use(express.json());
 // CORS configuration
 const corsOptions = {
     origin: function (origin, callback) {
-        const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+        const allowedOrigins = ALLOWED_ORIGINS.split(',');
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
