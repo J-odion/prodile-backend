@@ -7,40 +7,59 @@ exports.login = async (req, res) => {
 
   // Log the incoming request body
   console.log("Login request body:", req.body);
+ 
+ try {
+   let user = await User.findOne({ email }).select("+password");
 
-  User.findOne({ email })
-    
+   // Log the retrieved user
+   console.log("User retrieved:", user);
 
-    try {
-      const { email, password } = req.body;
-      // Check for User
-      const User = await User.findOne({ email }).select("+password");
-  
-      if (!User) {
-        return res.status(400).json({ message: "User not found" });
+   if (!user) {
+     return res
+       .status(400)
+       .json({ msg: "Invalid Email address - User not found" });
+   }
+
+   if (!user.isVerified) {
+     return res
+       .status(400)
+       .json({ msg: "Invalid credentials - User has not verified OTP" });
+   }
+
+   // Compare the provided password with the hashed password in the database
+   const isMatch = await bcrypt.compare(password, user.password);
+   if (!isMatch) {
+     return res
+       .status(400)
+       .json({ msg: "Invalid credentials - Incorrect password" });
       }
-  
-      // if the password matches
-      const isMatch = await bcrypt.compare(password, User.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-  
-      // Generate JWT tokens
-      const accessToken = generateAccessToken(User);
-      const refreshToken = generateRefreshToken(User);
-  
-      res.status(200).json({
-        message: "Logged in successfully",
-        accessToken,
-        refreshToken,
-        User: {
-          UserId: User.UserId,
-          email: User.email,
-          name: User.name,
-        },
-      });
-    } catch (error) {
-      res.status(500).json({ message: `Error logging in: ${error.message}` });
+      console.log(isMatch)
+
+   const itisMatch = await bcrypt.compare(password, user.password);
+    if (!itisMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
+    console.log(itisMatch)
+
+
+   const payload = {
+     user: {
+       id: user.id,
+     },
+   };
+
+   jwt.sign(
+     payload,
+     process.env.JWT_SECRET,
+     { expiresIn: 360000 },
+     (err, token) => {
+       if (err) throw err;
+       res.json({ token });
+     }
+   );
+ } catch (err) {
+   console.error(err.message);
+   res.status(500).send("Server error");
+ }
 };
+

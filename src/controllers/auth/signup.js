@@ -15,14 +15,14 @@ exports.signup = async (req, res) => {
         }
 
         // Generate salt and hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        console.log('Hashed password:', hashedPassword);
+        // const salt = await bcrypt.genSalt(10);
+        // const hashedPassword = await bcrypt.hash(password, salt);
+        // console.log('Hashed password:', hashedPassword);
 
         user = new User({
             name,
             email,
-            password: hashedPassword, // Save the hashed password
+            password: password, // Save the hashed password
             isVerified: false, // Initial state
         });
 
