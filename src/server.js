@@ -46,6 +46,6 @@ const PORT = process.env.PORT || 5000;
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/profile", require("./routes/profile"));
 app.use("/api/resources", require("./routes/resources"));
-app.use("/api/individualproductiveunit", require("./routes/productiveUnit"));
+// app.use("/api/individualproductiveunit", require("./routes/productiveUnit"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
