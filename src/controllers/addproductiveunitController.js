@@ -1,7 +1,7 @@
 // controllers/productiveUnitController.js
 // const ProductiveUnit = require('../models/ProductiveUnit');
 
-const productiveUnit = require("../models/productiveUnit");
+const productiveUnit = require("../models/individualProductiveUnit");
 
 exports.addProductiveUnit = async (req, res) => {
     const {

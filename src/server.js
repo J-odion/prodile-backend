@@ -43,9 +43,11 @@ app.use(cors(corsOptions));
 const PORT = process.env.PORT || 5000;
 
 // Define Routes
+app.use("/api/agent", require("./routes/agents"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/profile", require("./routes/profile"));
 app.use("/api/resources", require("./routes/resources"));
+app.use("/api/productiveunit", require("./routes/productiveUnits"))
 // app.use("/api/individualproductiveunit", require("./routes/productiveUnit"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
